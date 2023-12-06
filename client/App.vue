@@ -63,7 +63,7 @@ export default {
 }
 
 .figure-0 {
-  background-image: url(/src/assets/img-3.png);
+  background-image: url(/client/assets/img-3.png);
   background-size: 100%;
   background-repeat: no-repeat;
   background-position: left top;
@@ -80,7 +80,7 @@ export default {
 }
 
 .figure-1 {
-  background-image: url(/src/assets/img-4.png);
+  background-image: url(/client/assets/img-4.png);
   background-size: 80%;
   background-repeat: no-repeat;
   background-position: left bottom;
@@ -96,7 +96,7 @@ export default {
 }
 
 .figure-2 {
-  background-image: url(/src/assets/img-5.png);
+  background-image: url(/client/assets/img-5.png);
   background-size: 90%;
   background-repeat: no-repeat;
   background-position: right top;
