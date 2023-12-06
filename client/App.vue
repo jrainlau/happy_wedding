@@ -1,7 +1,7 @@
 <template>
   <h1 class="title" :class="{'is-touching': isTouching}">Happy Wedding</h1>
   <Topics />
-  <div class="figure-0" :class="{'is-touching': isTouching}"></div>
+  <div class="figure-0" :class="{'is-touching': isTouching}" @click="reload"></div>
   <div class="figure-1" :class="{'is-touching': isTouching}"></div>
   <div class="figure-2" :class="{'is-touching': isTouching}"></div>
   <Timer v-if="!isEditMode && showTimer" :class="{'is-touching': isTouching}" />
@@ -42,6 +42,11 @@ export default {
     eventBus.on('GOT_TOPICS', () => {
       this.showTimer = true
     })
+  },
+  methods: {
+    reload() {
+      location.reload()
+    }
   }
 }
 </script>
