@@ -1,16 +1,25 @@
 <template>
   <swiper
+    ref="mySwiper"
     :effect="'cards'"
     :grabCursor="true"
     :modules="modules"
     class="topics"
+    @swiper="(s) => { swiper = s }"
     @slideChange="onSlideChange"
     @touchMove="onTouchMove"
     @touchEnd="onTouchEnd"
   >
-    <swiper-slide v-for="i in 20" :key="i">
-      <TopicItem :index="i" />
-    </swiper-slide>
+    <template v-if="isEditMode">
+      <swiper-slide v-for="(topic) in topics" :key="topic._id">
+        <Editor :topic="topic" :allow-create-new="topics.every(t => !!t._id)" />
+      </swiper-slide>
+    </template>
+    <template v-else>
+      <swiper-slide v-for="(topic, index) in topics" :key="topic._id">
+        <TopicItem :topic="topic" :index="index" />
+      </swiper-slide>
+    </template>
   </swiper>
 </template>
 <script>
@@ -20,16 +29,22 @@ import "swiper/css/effect-cards";
 import { EffectCards } from "swiper/modules";
 
 import TopicItem from './TopicItem.vue'
+import Editor from './Editor.vue'
 import eventBus from '../eventBus'
+import postApi from '../request'
+
+import { useSetup } from '../setup'
 
 export default {
   components: {
     Swiper,
     SwiperSlide,
     TopicItem,
+    Editor,
   },
   setup() {
     return {
+      ...useSetup(),
       modules: [EffectCards],
       onSlideChange(s) {
         eventBus.emit('SLIDE_CHANGE')
@@ -42,8 +57,40 @@ export default {
       },
     };
   },
+  data() {
+    return {
+      swiper: null,
+      topics: [],
+    }
+  },
+  async mounted() {
+    await this.getTopics()
+    eventBus.on('CREATE_NEW', () => {
+      this.topics.unshift({
+        _id: '',
+        topicId: this.topicId,
+        question: '',
+        type: 0,
+        tips: '',
+        answers: [''],
+        timeLimit: 60 * 1000,
+      })
+
+      this.swiper.slideTo(0)
+    })
+    eventBus.on('REFRESH_TOPICS', () => {
+      this.getTopics()
+    })
+  },
   methods: {
-    
+    async getTopics() {
+      const res = await postApi('/get_topics', {
+        topicId: this.topicId
+      })
+      if (res.code === 0) {
+        this.topics = res.data
+      }
+    }
   }
 };
 </script>

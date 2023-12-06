@@ -4,18 +4,24 @@
   <div class="figure-0" :class="{'is-touching': isTouching}"></div>
   <div class="figure-1" :class="{'is-touching': isTouching}"></div>
   <div class="figure-2" :class="{'is-touching': isTouching}"></div>
-  <Timer :class="{'is-touching': isTouching}" />
+  <Timer v-if="!isEditMode" :class="{'is-touching': isTouching}" />
 </template>
 <script>
 import Topics from './components/Topics.vue'
 import Timer from './components/Timer.vue'
 
 import eventBus from './eventBus'
+import { useSetup } from './setup'
 
 export default {
   components: {
     Topics,
     Timer,
+  },
+  setup() {
+    return {
+      ...useSetup(),
+    }
   },
   data() {
     return {

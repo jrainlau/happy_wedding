@@ -36,14 +36,38 @@ export async function getTopics(topicId) {
   } else {
     return {
       code: -1,
-      error: `Cannot find Topic.`
+      error: `Cannot find topic.`
     }
+  }
+}
+
+export async function editTopic({ _id, topicId, question, type, tips, answers, timeLimit }) {
+  const topic = await Topic.findOne({ _id }).catch(e => e)
+
+  if (!topic._id) {
+    return {
+      code: -1,
+      error: topic,
+    }
+  }
+  topic.topicId = topicId
+  topic.question = question
+  topic.type = type
+  topic.tips = tips
+  topic.answers = answers
+  topic.timeLimit = timeLimit
+
+  const saveRes = await topic.save().catch(e => e)
+
+  return {
+    code: 0,
+    data: saveRes,
   }
 }
 
 export async function deleteTopic(_id) {
   const res = await Topic.deleteOne({ _id }).catch(e => e)
-  if (res.code) {
+  if (res) {
     return {
       code: 0,
       data: res
@@ -51,7 +75,7 @@ export async function deleteTopic(_id) {
   } else {
     return {
       code: -1,
-      error: res
+      error: 'delete error'
     }
   }
 }

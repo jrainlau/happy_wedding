@@ -1,6 +1,7 @@
 import express from 'express'
 import {
   addTopic,
+  editTopic,
   getTopics,
   deleteTopic,
 } from './topics.js'
@@ -27,6 +28,13 @@ router.get('/test', (req, res) => {
 router.post('/add_topic', authMiddleware, async (req, res) => {
   const { topicId, question, type, tips, answers, timeLimit } = req.body
   const result = await addTopic({ topicId, question, type, tips, answers, timeLimit })
+  res.setHeader('Access-Control-Allow-Origin', '*');
+  res.json(result);
+})
+
+router.post('/edit_topic', authMiddleware, async (req, res) => {
+  const { _id, topicId, question, type, tips, answers, timeLimit } = req.body
+  const result = await editTopic({ _id, topicId, question, type, tips, answers, timeLimit })
   res.setHeader('Access-Control-Allow-Origin', '*');
   res.json(result);
 })
