@@ -2,33 +2,17 @@
   <ul class="editor">
     <li class="edit-item">
       <div class="label">题目</div>
-      <textarea rows="4" class="input" v-model="question"></textarea>
-    </li>
-
-    <li class="edit-item">
-      <div class="label">类型</div>
-      <span class="select-type" :class="{'active': type === 0}" @click="() => { type = 0 }">填空题</span>
-      <span class="select-type" :class="{'active': type === 1}" @click="() => { type = 1 }">单选题</span>
-      <span class="select-type" :class="{'active': type === 2}" @click="() => { type = 2 }">判断题</span>
+      <textarea rows="4" class="input" v-model="question" placeholder="随意换行随意DIY"></textarea>
     </li>
 
     <li class="edit-item">
       <div class="label">提示</div>
-      <input type="text" class="input" v-model="tips" :placeholder="type === 1 ? '单选题请把正确答案写呢度' : '随便写啲乜'">
+      <input type="text" class="input" v-model="tips" placeholder="随便写啲乜">
     </li>
 
     <li class="edit-item">
       <div class="label">答案</div>
-      <input v-if="type === 0" type="text" class="input" v-model="answers[0]">
-      <div class="answers-wrapper" v-if="type === 1">
-        <input type="text" class="input" v-model="answers[0]" placeholder="选项 A">
-        <input type="text" class="input" v-model="answers[1]" placeholder="选项 B">
-        <input type="text" class="input" v-model="answers[2]" placeholder="选项 C">
-        <input type="text" class="input" v-model="answers[3]" placeholder="选项 D">
-      </div>
-      <div class="answers-wrapper" v-if="type === 2">
-        <input type="text" class="input" v-model="answers[0]" placeholder="写“对”或者“错”">
-      </div>
+      <input type="text" class="input" v-model="answers[0]" placeholder="你嘅标准答案，写长啲都唔怕">
     </li>
 
     <!-- <li class="edit-item">
@@ -152,6 +136,9 @@ export default {
   padding: 0;
   list-style: none;
   font-size: 36px;
+  width: 100%;
+  max-width: 500px;
+  padding: 0 30px;
   * {
     font-family: qiaruchujian;
   }
@@ -159,7 +146,7 @@ export default {
     display: flex;
     margin-bottom: 15px;
     .label {
-      width: 8em;
+      width: 3em;
       text-align: right;
       margin-right: 15px;
     }
@@ -170,7 +157,7 @@ export default {
       padding: 5px 10px;
       outline: none;
       font-size: 24px;
-      width: 20em;
+      width: 100%;
       resize: none;
     }
 

@@ -4,7 +4,7 @@
   <div class="figure-0" :class="{'is-touching': isTouching}"></div>
   <div class="figure-1" :class="{'is-touching': isTouching}"></div>
   <div class="figure-2" :class="{'is-touching': isTouching}"></div>
-  <Timer v-if="!isEditMode" :class="{'is-touching': isTouching}" />
+  <Timer v-if="!isEditMode && showTimer" :class="{'is-touching': isTouching}" />
 </template>
 <script>
 import Topics from './components/Topics.vue'
@@ -26,6 +26,7 @@ export default {
   data() {
     return {
       isTouching: false,
+      showTimer: false,
     }
   },
   mounted() {
@@ -34,6 +35,12 @@ export default {
     })
     eventBus.on('TOUCH_END', () => {
       this.isTouching = false
+    })
+    eventBus.on('EMPTY_TOPICS', () => {
+      this.showTimer = false
+    })
+    eventBus.on('GOT_TOPICS', () => {
+      this.showTimer = true
     })
   }
 }

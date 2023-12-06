@@ -4,7 +4,7 @@
   "version": "0.0.0",
   "type": "module",
   "scripts": {
-    "dev:client": "vite",
+    "dev:client": "vite --host",
     "build:client": "vite build",
     "preview": "vite preview",
     "dev:server": "nodemon ./server/app.js",

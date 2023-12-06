@@ -10,6 +10,9 @@
     @touchMove="onTouchMove"
     @touchEnd="onTouchEnd"
   >
+    <swiper-slide v-if="!topics.length">
+        <div class="empty">空空如也，乜都冇</div>
+    </swiper-slide>
     <template v-if="isEditMode">
       <swiper-slide v-for="(topic) in topics" :key="topic._id">
         <Editor :topic="topic" :allow-create-new="topics.every(t => !!t._id)" />
@@ -65,18 +68,11 @@ export default {
   },
   async mounted() {
     await this.getTopics()
+    if (!this.topics.length && this.isEditMode) {
+      this.createNew()
+    }
     eventBus.on('CREATE_NEW', () => {
-      this.topics.unshift({
-        _id: '',
-        topicId: this.topicId,
-        question: '',
-        type: 0,
-        tips: '',
-        answers: [''],
-        timeLimit: 60 * 1000,
-      })
-
-      this.swiper.slideTo(0)
+      this.createNew()
     })
     eventBus.on('REFRESH_TOPICS', () => {
       this.getTopics()
@@ -90,7 +86,25 @@ export default {
       if (res.code === 0) {
         this.topics = res.data
       }
-    }
+      if (!this.topics.length) {
+        eventBus.emit('EMPTY_TOPICS')
+      } else {
+        eventBus.emit('GOT_TOPICS')
+      }
+    },
+    createNew() {
+      this.topics.unshift({
+        _id: '',
+        topicId: this.topicId,
+        question: '',
+        type: 0,
+        tips: '',
+        answers: [''],
+        timeLimit: 60 * 1000,
+      })
+
+      this.swiper.slideTo(0)
+    },
   }
 };
 </script>
@@ -110,6 +124,11 @@ export default {
   font-size: 22px;
   font-weight: bold;
   color: #fff;
+}
+
+.empty {
+  font-family: qiaruchujian;
+  font-size: 48px;
 }
 
 .swiper-slide:nth-child(1n) {
